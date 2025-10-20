@@ -1,0 +1,13 @@
+AI-Powered Note Creator
+Copyright 2025 Jauza Ilham Mahardhika Putra, Zaka Ahmad Ghofari, Dhimas Hafid Fathoni
+
+This product includes software developed for the Google Chrome Built-in AI Challenge 2025.
+
+This software uses the following technologies:
+- Chrome's Built-in Prompt API (Gemini Nano)
+- React (MIT License)
+- Node.js and Express (MIT License)
+- MongoDB (Server Side Public License)
+- PDF.js (Apache License 2.0)
+
+For questions or inquiries, please contact the project team.
