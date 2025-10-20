@@ -1,2 +1,2 @@
-# SquareBox-NoteCreator
+# SquareBox - Ai Powered NoteCreator
 Temporary Description
