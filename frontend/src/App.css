@@ -1,0 +1,63 @@
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glassmorphism effect idk what the fuck this mean btw */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animated gradient border */
+@keyframes gradient-border {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-border {
+  background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+  background-size: 200% 200%;
+  animation: gradient-border 3s ease infinite;
+}
+
+/* Keyboard shortcut styling */
+kbd {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+}
+/* Smooth blur transition */
+.blur-sm {
+  filter: blur(8px);
+}
+
+/* Prevent text selection saat resize */
+body.resizing {
+  user-select: none;
+  cursor: ew-resize !important;
+}
+
+/* Resize handle hover effect */
+.resize-handle {
+  transition: all 0.2s ease;
+}
+
+.resize-handle:hover {
+  width: 8px;
+}
+
+/* Smooth width transition */
+.sidebar-container {
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
