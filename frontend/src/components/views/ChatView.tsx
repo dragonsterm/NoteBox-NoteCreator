@@ -10,7 +10,9 @@ import {
   FileType,
   Upload,
   Plus,
-  X
+  X,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react'
 
 interface Message {
@@ -38,6 +40,7 @@ export default function ChatView({ initialSource }: ChatViewProps) {
   const [sources, setSources] = useState<Source[]>([])
   const [showSourceMenu, setShowSourceMenu] = useState(false)
   const [hasInitialized, setHasInitialized] = useState(false)
+  const [isSourcesCollapsed, setIsSourcesCollapsed] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -168,57 +171,85 @@ export default function ChatView({ initialSource }: ChatViewProps) {
       {/* Sources Display jika user memilih scan web atau upload */}
       {sources.length > 0 && (
         <div className="flex-shrink-0 border-b border-gray-800">
-          <div className="p-4">
-            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+          {/* Header with toggle */}
+          <button
+            onClick={() => setIsSourcesCollapsed(!isSourcesCollapsed)}
+            className="w-full flex items-center justify-between p-4 py-3 hover:bg-gray-800/50 transition-colors group"
+          >
+            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+              <FileText className="w-3 h-3" />
               Sources ({sources.length})
             </h3>
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-              {sources.slice(0, 3).map((source, index) => {
-                const IconComponent = getSourceIcon(source.type)
-                return (
-                  <motion.div
-                    key={source.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="group relative flex-shrink-0 w-32 h-32 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-gray-600 transition-all overflow-hidden"
-                  >
-                    {/* Preview/Icon */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 rounded-lg bg-gradient-primary flex items-center justify-center">
-                        <IconComponent className="w-8 h-8 text-white" />
+            <motion.div
+              animate={{ rotate: isSourcesCollapsed ? 0 : 180 }}
+              transition={{ duration: 0.2 }}
+              className="text-gray-400 group-hover:text-gray-300"
+            >
+              <ChevronDown className="w-4 h-4" />
+            </motion.div>
+          </button>
+
+          {/* Collapsible content */}
+          <AnimatePresence>
+            {!isSourcesCollapsed && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2, ease: 'easeInOut' }}
+                className="overflow-hidden"
+              >
+                <div className="px-4 pb-4 pt-2">
+                  <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                    {sources.slice(0, 3).map((source, index) => {
+                      const IconComponent = getSourceIcon(source.type)
+                      return (
+                        <motion.div
+                          key={source.id}
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: index * 0.05 }}
+                          className="group relative flex-shrink-0 w-32 h-32 bg-gray-800/50 rounded-xl border border-gray-700 hover:border-gray-600 transition-all overflow-hidden"
+                        >
+                          {/* Preview/Icon */}
+                          <div className="absolute inset-0 flex items-center justify-center p-3">
+                            <div className="w-16 h-16 rounded-lg bg-gradient-primary flex items-center justify-center">
+                              <IconComponent className="w-8 h-8 text-white" />
+                            </div>
+                          </div>
+
+                          {/* Source Name */}
+                          <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-gray-900 to-transparent">
+                            <p className="text-xs text-white font-medium truncate">
+                              {source.name}
+                            </p>
+                          </div>
+
+                          {/* Remove Button */}
+                          <button
+                            onClick={() => removeSource(source.id)}
+                            className="absolute top-2 right-2 p-1 bg-red-500/80 hover:bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="w-3 h-3 text-white" />
+                          </button>
+                        </motion.div>
+                      )
+                    })}
+
+                    {/* Show more sources */}
+                    {sources.length > 3 && (
+                      <div className="flex-shrink-0 w-32 h-32 bg-gray-800/50 rounded-xl border border-gray-700 flex items-center justify-center">
+                        <div className="text-center p-3">
+                          <p className="text-2xl font-bold text-white">+{sources.length - 3}</p>
+                          <p className="text-xs text-gray-400">more sources</p>
+                        </div>
                       </div>
-                    </div>
-
-                    {/* Source Name */}
-                    <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-gray-900 to-transparent">
-                      <p className="text-xs text-white font-medium truncate">
-                        {source.name}
-                      </p>
-                    </div>
-
-                    {/* Remove Button */}
-                    <button
-                      onClick={() => removeSource(source.id)}
-                      className="absolute top-2 right-2 p-1 bg-red-500/80 hover:bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="w-3 h-3 text-white" />
-                    </button>
-                  </motion.div>
-                )
-              })}
-
-              {/* Show more sources */}
-              {sources.length > 3 && (
-                <div className="flex-shrink-0 w-32 h-32 bg-gray-800/50 rounded-xl border border-gray-700 flex items-center justify-center">
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-white">+{sources.length - 3}</p>
-                    <p className="text-xs text-gray-400">more sources</p>
+                    )}
                   </div>
                 </div>
-              )}
-            </div>
-          </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       )}
 
