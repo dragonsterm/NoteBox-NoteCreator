@@ -2,7 +2,7 @@
 
 ## 📋 Project Overview
 
-- **Name:** AI Note Creator (SquareBox)
+- **Name:** AI Note Creator (NoteBox)
 - **Type:** Chrome Extension
 - **Purpose:** An intelligent browser extension that captures web content (text, images, PDFs) and uses Chrome's built-in Gemini Nano AI to generate summaries, study notes, flashcards, and quizzes. Users can interact with the AI through a chat interface to ask questions and deepen their understanding of the captured content.
 - **Target Users:** Students, researchers, professionals, lifelong learners

@@ -53,7 +53,7 @@ export default function Sidebar({ activeView, onViewChange }: SidebarProps) {
             <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
-            <span className="font-semibold text-white text-lg">SquareBox</span>
+            <span className="font-semibold text-white text-lg">NoteBox</span>
           </div>
           {/* User Info and Settings */}
           <div className="flex items-center gap-2">
