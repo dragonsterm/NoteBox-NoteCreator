@@ -25,12 +25,13 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: #0f0f1e;
+  background: transparent;
 }
 
 #root {
   width: 100%;
   height: 100vh;
+  background: transparent;
 }
 
 /* Custom Scrollbsr */
