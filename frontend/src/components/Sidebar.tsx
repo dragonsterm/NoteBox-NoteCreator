@@ -44,7 +44,7 @@ export default function Sidebar({ activeView, onViewChange }: SidebarProps) {
   }
 
   return (
-    <div className="h-full flex flex-col bg-[#1a1a2e] border-l border-gray-800 relative rounded-l-2xl overflow-hidden">
+    <div className="h-full flex flex-col bg-[#1a1a2e] border-l border-gray-800 relative rounded-l-2xl">
       {/* Header */}
       <header className="flex-shrink-0 p-4 border-b border-gray-800">
         <div className="flex items-center justify-between mb-4">
@@ -132,7 +132,7 @@ export default function Sidebar({ activeView, onViewChange }: SidebarProps) {
       </nav>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-hidden relative">
+      <main className="flex-1 relative overflow-y-auto">
         {activeView === 'capture' && <CaptureView onNavigate={handleNavigate} />}
         {activeView === 'chat' && <ChatView initialSource={chatSource} />}
         {activeView === 'library' && <LibraryView />}

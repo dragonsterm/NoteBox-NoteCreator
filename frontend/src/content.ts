@@ -13,6 +13,7 @@ if (!document.getElementById('notebox-root')) {
 
   const appContainer = document.createElement('div');
   appContainer.id = 'notebox-app-container';
+  appContainer.style.height = '100%';
   shadowRoot.appendChild(appContainer);
 
   // Inject CSS
