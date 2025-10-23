@@ -9,10 +9,24 @@ if (!document.getElementById('notebox-root')) {
   rootDiv.style.display = 'none'; // Initially hidden
   document.body.appendChild(rootDiv);
 
+  const shadowRoot = rootDiv.attachShadow({ mode: 'open' });
+
+  const appContainer = document.createElement('div');
+  appContainer.id = 'notebox-app-container';
+  shadowRoot.appendChild(appContainer);
+
+  // Inject CSS
+  const cssUrl = chrome.runtime.getURL('style.css');
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = cssUrl;
+  shadowRoot.appendChild(link);
+
+  // Inject JS
   const script = document.createElement('script');
   script.src = chrome.runtime.getURL('main.js');
   script.type = 'module';
-  document.body.appendChild(script);
+  appContainer.appendChild(script);
 }
 
 if (!(window as any).hasNoteboxListener) {
