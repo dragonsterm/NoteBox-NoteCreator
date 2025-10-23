@@ -6,13 +6,10 @@
   "permissions": [
     "activeTab",
     "storage",
-    "sidePanel"
+    "scripting"
   ],
   "action": {
     "default_title": "Open NoteBox"
-  },
-  "side_panel": {
-    "default_path": "index.html"
   },
   "background": {
     "service_worker": "background.js"
@@ -20,8 +17,8 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "index.html",
-        "popup.js",
+        "main.js",
+        "content.js",
         "assets/*"
       ],
       "matches": [

@@ -52,7 +52,7 @@ function App() {
   }
 
   return (
-    <div className="h-screen w-full bg-transparent overflow-hidden relative">
+    <div className="h-full w-full bg-transparent overflow-hidden">
       {/* Collapse atau Expand Button saat sidebar is collapsed */}
       <AnimatePresence>
         {isCollapsed && (

@@ -28,16 +28,6 @@ body {
   background: transparent;
 }
 
-#notebox-root {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 400px;
-  height: 100vh;
-  z-index: 9999;
-  background: transparent;
-}
-
 /* Custom Scrollbsr */
 ::-webkit-scrollbar {
   width: 8px;
