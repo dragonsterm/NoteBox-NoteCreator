@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Send, 
-  Sparkles, 
   User, 
   Bot, 
   FileText,
@@ -11,8 +10,7 @@ import {
   Upload,
   Plus,
   X,
-  ChevronDown,
-  ChevronUp
+  ChevronDown
 } from 'lucide-react'
 
 interface Message {
