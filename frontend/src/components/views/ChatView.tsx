@@ -253,9 +253,12 @@ export default function ChatView({ initialSource }: ChatViewProps) {
 
       {/* Messages Container */}
       <div className="flex-1 p-4 space-y-4">
-        <div>
+        <AnimatePresence>
           {messages.map((message) => (
-            <div
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
               key={message.id}
               className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
             >
@@ -283,9 +286,9 @@ export default function ChatView({ initialSource }: ChatViewProps) {
                   {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </AnimatePresence>
 
         {isTyping && (
           <motion.div
