@@ -121,20 +121,23 @@ People consume massive amounts of web content daily but struggle to:
 4. ✅ Build Capture View with simplified options
 5. ✅ Build Chat View with AI interaction
 6. ✅ Build Library View (Your Notes)
+7. ✅ Setup Simple Chrome extension manifest
+8. ✅ Display and Design works in chrome
 
 ### Next Steps:
 
-1. Setup Chrome extension manifest
-2. Integrate Gemini Nano Prompt API
-3. Implement content capture features (DOM parsing)
-4. Add file upload with OCR capability
-5. Develop backend API
+1. Integrate Gemini Nano Prompt API
+2. Implement content capture features (DOM parsing)
+3. Add file upload with OCR capability
+4. Develop backend API
 6. Create MongoDB schemas
 7. Connect frontend to backend
 8. Implement study tools (flashcards, quizzes)
-9. Polish UI/UX
-10. Record demo video
-11. Submit to challenge
+9. Integrataion all function to extension form
+10. Polish UI/UX
+11. Testing extension
+12. Record demo video
+13. Submit to challenge
 
 ## 🔄 User Flow
 
