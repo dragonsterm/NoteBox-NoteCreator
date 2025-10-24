@@ -251,78 +251,83 @@ export default function ChatView({ initialSource }: ChatViewProps) {
         </div>
       )}
 
-      {/* Messages Container */}
-      <div className="flex-1 p-4 space-y-4">
-        <AnimatePresence>
-          {messages.map((message) => (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              key={message.id}
-              className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
-            >
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                message.role === 'user' 
-                  ? 'bg-gradient-to-r from-blue-500 to-cyan-500' 
-                  : 'bg-gradient-to-r from-purple-500 to-pink-500'
-              }`}>
-                {message.role === 'user' ? (
-                  <User className="w-4 h-4 text-white" />
-                ) : (
-                  <Bot className="w-4 h-4 text-white" />
-                )}
-              </div>
-
-              <div className={`flex-1 ${message.role === 'user' ? 'items-end' : 'items-start'} flex flex-col`}>
-                <div className={`max-w-[85%] p-3 rounded-2xl ${
-                  message.role === 'user'
-                    ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white'
-                    : 'bg-gray-800 text-gray-100'
+      {/* Messages Container - Scrollable */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-4 space-y-4">
+          <AnimatePresence>
+            {messages.map((message) => (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                key={message.id}
+                className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
+              >
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  message.role === 'user' 
+                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500' 
+                    : 'bg-gradient-to-r from-purple-500 to-pink-500'
                 }`}>
-                  <p className="text-sm leading-relaxed">{message.content}</p>
+                  {message.role === 'user' ? (
+                    <User className="w-4 h-4 text-white" />
+                  ) : (
+                    <Bot className="w-4 h-4 text-white" />
+                  )}
                 </div>
-                <span className="text-xs text-gray-500 mt-1 px-1">
-                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </span>
+
+                <div className={`flex-1 ${message.role === 'user' ? 'items-end' : 'items-start'} flex flex-col`}>
+                  <div className={`max-w-[85%] p-3 rounded-2xl ${
+                    message.role === 'user'
+                      ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white'
+                      : 'bg-gray-800 text-gray-100'
+                  }`}>
+                    <p className="text-sm leading-relaxed">{message.content}</p>
+                  </div>
+                  <span className="text-xs text-gray-500 mt-1 px-1">
+                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          {isTyping && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex gap-3"
+            >
+              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                <Bot className="w-4 h-4 text-white" />
+              </div>
+              <div className="bg-gray-800 p-3 rounded-2xl">
+                <div className="flex gap-1">
+                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                </div>
               </div>
             </motion.div>
-          ))}
-        </AnimatePresence>
-
-        {isTyping && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex gap-3"
-          >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-              <Bot className="w-4 h-4 text-white" />
-            </div>
-            <div className="bg-gray-800 p-3 rounded-2xl">
-              <div className="flex gap-1">
-                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-              </div>
-            </div>
-          </motion.div>
-        )}
-        <div ref={messagesEndRef} />
+          )}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
-      {/* Quick Prompts */}
-      <div className="flex-shrink-0 px-4 pb-2">
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-          {quickPrompts.map((prompt) => (
-            <button
-              key={prompt}
-              onClick={() => setInput(prompt)}
-              className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs rounded-full whitespace-nowrap transition-colors border border-gray-700"
-            >
-              {prompt}
-            </button>
-          ))}
+      {/* Fixed Bottom Section */}
+      <div className="flex-shrink-0 border-t border-gray-800 bg-[#1a1a2e]">
+        {/* Quick Prompts */}
+        <div className="px-4 pt-3 pb-2">
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            {quickPrompts.map((prompt) => (
+              <button
+                key={prompt}
+                onClick={() => setInput(prompt)}
+                className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs rounded-full whitespace-nowrap transition-colors border border-gray-700"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
