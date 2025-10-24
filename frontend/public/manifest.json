@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NoteBox - AI Note Creator",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A note-taking app powered by AI.",
   "permissions": [
     "activeTab",
@@ -20,7 +20,8 @@
         "main.js",
         "content.js",
         "style.css",
-        "assets/*"
+        "assets/*",
+        "gemini-bridge.js"
       ],
       "matches": [
         "<all_urls>"

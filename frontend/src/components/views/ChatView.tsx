@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Send, 
-  User, 
-  Bot, 
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import {
+  Send,
+  User,
+  Bot,
   FileText,
   Image,
   FileType,
@@ -30,6 +32,7 @@ interface Source {
 interface ChatViewProps {
   initialSource?: Source
 }
+
 
 export default function ChatView({ initialSource }: ChatViewProps) {
   const [messages, setMessages] = useState<Message[]>([])
@@ -89,8 +92,9 @@ export default function ChatView({ initialSource }: ChatViewProps) {
     scrollToBottom()
   }, [messages])
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return
+
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
@@ -101,17 +105,34 @@ export default function ChatView({ initialSource }: ChatViewProps) {
     setInput('')
     setIsTyping(true)
 
-    // Simulasi ai respon wak
-    setTimeout(() => {
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'This is a simulated response. In production, this will use Gemini Nano to provide intelligent answers based on your captured content.',
-        timestamp: new Date()
+ // Send the user’s prompt to the injected Gemini bridge script (runs in page context)
+    window.postMessage({ type: "GEMINI_PROMPT_REQUEST", prompt: input }, "*")
+
+    const onResponse = (event: MessageEvent) => {
+      if (event.data?.type === "GEMINI_PROMPT_RESPONSE") {
+        const aiMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: event.data.result,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, aiMessage])
+        setIsTyping(false)
+        window.removeEventListener("message", onResponse)
+      } else if (event.data?.type === "GEMINI_PROMPT_ERROR") {
+        console.error(event.data.error)
+        setMessages(prev => [...prev, {
+          id: (Date.now() + 2).toString(),
+          role: 'assistant',
+          content: "[Error] Gemini Nano bridge error: " + event.data.error,
+          timestamp: new Date()
+        }])
+        setIsTyping(false)
+        window.removeEventListener("message", onResponse)
       }
-      setMessages(prev => [...prev, aiMessage])
-      setIsTyping(false)
-    }, 1500)
+    }
+
+    window.addEventListener("message", onResponse)
   }
 
   const handleFileUpload = () => {
@@ -129,7 +150,7 @@ export default function ChatView({ initialSource }: ChatViewProps) {
       }
       setSources(prev => [...prev, newSource])
       setShowSourceMenu(false)
-      
+
       // simulasi analysis of newly added source
       setIsTyping(true)
       setTimeout(() => {
@@ -263,11 +284,10 @@ export default function ChatView({ initialSource }: ChatViewProps) {
                 key={message.id}
                 className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                  message.role === 'user' 
-                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500' 
-                    : 'bg-gradient-to-r from-purple-500 to-pink-500'
-                }`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${message.role === 'user'
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                  : 'bg-gradient-to-r from-purple-500 to-pink-500'
+                  }`}>
                   {message.role === 'user' ? (
                     <User className="w-4 h-4 text-white" />
                   ) : (
@@ -276,12 +296,24 @@ export default function ChatView({ initialSource }: ChatViewProps) {
                 </div>
 
                 <div className={`flex-1 ${message.role === 'user' ? 'items-end' : 'items-start'} flex flex-col`}>
-                  <div className={`max-w-[85%] p-3 rounded-2xl ${
-                    message.role === 'user'
-                      ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white'
-                      : 'bg-gray-800 text-gray-100'
-                  }`}>
-                    <p className="text-sm leading-relaxed">{message.content}</p>
+                  <div className={`max-w-[85%] p-3 rounded-2xl ${message.role === 'user'
+                    ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white'
+                    : 'bg-gray-800 text-gray-100'
+                    }`}>
+                    <div className="prose prose-invert max-w-none text-sm leading-relaxed">
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          p: ({ children }) => <p className="mb-2">{children}</p>,
+                          strong: ({ children }) => <strong className="font-semibold text-white">{children}</strong>,
+                          em: ({ children }) => <em className="italic">{children}</em>,
+                          ul: ({ children }) => <ul className="list-disc ml-5 mt-2">{children}</ul>,
+                          li: ({ children }) => <li>{children}</li>,
+                        }}
+                      >
+                        {message.content}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                   <span className="text-xs text-gray-500 mt-1 px-1">
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -356,7 +388,7 @@ export default function ChatView({ initialSource }: ChatViewProps) {
             <AnimatePresence>
               {showSourceMenu && (
                 <>
-                  <div 
+                  <div
                     className="fixed inset-0 z-40"
                     onClick={() => setShowSourceMenu(false)}
                   />

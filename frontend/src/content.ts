@@ -28,6 +28,12 @@ if (!document.getElementById('notebox-root')) {
   script.src = chrome.runtime.getURL('main.js');
   script.type = 'module';
   appContainer.appendChild(script);
+
+  // Inject Gemini Bridge
+  const bridge = document.createElement('script')
+  bridge.src = chrome.runtime.getURL('gemini-bridge.js')
+  bridge.type = 'module'
+  document.documentElement.appendChild(bridge)
 }
 
 if (!(window as any).hasNoteboxListener) {

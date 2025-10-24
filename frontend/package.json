@@ -25,11 +25,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@types/chrome": "^0.0.243",
+    "@types/dom-chromium-ai": "^0.0.10",
     "@types/node": "^24.6.0",
     "@types/prismjs": "^1.26.5",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
-    "@types/chrome": "^0.0.243",
     "@vitejs/plugin-react-swc": "^4.1.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.36.0",
