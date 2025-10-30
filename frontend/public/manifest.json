@@ -17,6 +17,7 @@
   "web_accessible_resources": [
     {
       "resources": [
+        "server.js",
         "main.js",
         "content.js",
         "style.css",
